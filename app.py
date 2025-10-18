@@ -1,35 +1,65 @@
-import tkinter as tk
-from tkinter import Listbox, messagebox
+import hashlib
 
-root = tk.Tk()
-root.title("To-Do List")
-root.geometry("400x450")
-root.resizable(False, False)
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
 
-def add_task():
-    task = entry.get()
-    if task != "":
-        listbox.insert(tk.END, task)
-        entry.delete(0, tk.END)
-    else:
-        messagebox.showwarning("Warning", "You must enter a task.")
-
-def delete_task():
-    try:
-        selected = listbox.curselection()[0]
-        listbox.delete(selected)
-    except IndexError:
-        messagebox.showwarning("Warning", "You must select a task to delete.")
-
-def clear_tasks():
-    listbox.delete(0, tk.END)
+def register():
+    username  = input('enter username: ')
+    age = input('enter age: ')
+    email = input('enter email: ')
+    password = input('enter password: ')
+    confirm = input('confirm password: ')
     
-def show_tasks():
-    tasks = listbox.get(0, tk.END)
-    if tasks:
-        messagebox.showinfo("Tasks", "\n".join(tasks))
-    else:
-        messagebox.showinfo("Tasks", "No tasks available.")
-        
-def save_tasks():
-    tasks = listbox.get
+    if password != confirm:
+        print("Passwords do not match.")
+        return
+    
+    with open('users.txt', 'a') as f:
+        f.write(f"{username},{age},{email},{hash_password(password)}\n")
+    print("Registration successful.")
+    
+def login():
+    username = input('enter username: ')
+    password = input('enter password: ')
+    
+    hashed_password = hash_password(password)
+    
+    with open('users.txt', 'r') as f:
+        for line in f:
+            user, age, email, stored_hashed_password = line.strip().split(',')
+            if user == username and stored_hashed_password == hashed_password:
+                print("Login successful.")
+                return
+    print("Invalid username or password.")
+    
+def get_users():
+    users = []
+    with open('users.txt', 'r') as f:
+        for line in f:
+            user, age, email, _ = line.strip().split(',')
+            users.append({'username': user, 'age': age, 'email': email})
+    return users
+    
+def main():
+    while True:
+        print("Welcome to the User System")
+        print("1. Register")
+        print("2. Login")
+        print("3. View Users")
+        print("4. Exit")
+        choice = input("Choose an option: ")
+        if choice == "1":
+            register()
+        elif choice == "2":
+            login()
+        elif choice == "3":
+            users = get_users()
+            for user in users:
+                print(f"Username: {user['username']}, Age: {user['age']}, Email: {user['email']}")  
+        elif choice == "4":
+            print("Exiting the User System. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+if __name__ == "__main__":
+    main()
