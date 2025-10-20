@@ -1,9 +1,17 @@
-from matplotlib import pyplot as plt 
+food_items = input('Enter food item name: ')
 
-labels = ['python', 'java', 'c++', 'ruby', 'javascript']
-sizes = [215, 130, 245, 210, 210]
-colors = ['gold', 'yellowgreen', 'lightcoral', 'lightskyblue', 'lightgreen']
-explode = (0.1, 0, 0, 0, 0)
-plt.pie(sizes, explode=explode, labels=labels, colors=colors,autopct='%1.1f%%', shadow=True, startangle=140)
-plt.axis('equal')
-plt.show()
+food_item_dict = {
+    'burger': 50,
+    'pizza': 100,
+    'pasta': 80,
+    'salad': 40,
+    'sushi': 120,
+    'juice': 30,
+    'coffee': 20
+}
+
+def get_price(food_items):
+    return food_item_dict.get(food_items, 'Item not found')
+
+price = get_price(food_items)
+print(f'The price of {food_items} is: {price}')
