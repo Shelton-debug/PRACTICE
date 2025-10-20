@@ -1,12 +1,13 @@
-import time 
+import turtle
 
-text = 'shelton is a good boy'
-colors = [31, 32, 33, 34, 35, 36, 37]
+t = turtle.Turtle()
+colors = ['red', 'purple', 'blue', 'green', 'orange', 'yellow']
+turtle.bgcolor('black')
 
-for i in range(10):
-    line = ''
-    for idx, char in enumerate(text):
-        color_code = colors[(idx + i) % len(colors)]
-        line += f'\033[{color_code}m{char}\033[0m'
-    print(line)
-    time.sleep(0.2)
+for x in range(360):
+    t.pencolor(colors[x % 6])
+    t.width(x / 100 + 1)
+    t.forward(x)
+    t.left(59)
+    
+turtle.done()
